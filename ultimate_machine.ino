@@ -29,30 +29,26 @@ void loop() {
     attachInterrupt( 0, wakeUp, LOW );
 
   if ( value == LOW ) { // switch turned on, move finger up to turn off switch
-    for( pos = pos; pos >= 1; pos -= 1 ) { // middle value of 1 is all the way out
-      myservo.write( pos );  // move the servo to current position
-      Serial.print( "Low" );
-      Serial.print( "\n" );
+    for( pos = pos; pos < 130; pos += 1 ) { // middle value of 180 is all the way in
+      myservo.write( pos );
+      Serial.print( pos );
+      Serial.print( "Low\n" );
       delay( SPEED );
     }
   } else { // switched turned off, go back in
-    for( pos = pos; pos < 130; pos += 1 ) { // middle value of 180 is all the way in
-      myservo.write( pos );
-      Serial.print( "High" );
-      Serial.print( "\n" );
+    for( pos = pos; pos >= 1; pos -= 1 ) { // middle value of 1 is all the way out
+      myservo.write( pos );  // move the servo to current position
+      Serial.print( pos );
+      Serial.print( "High\n" );
       delay( SPEED );
       if ( pos == 130 ) {
         // Enter power down state with ADC and BOD module disabled.
         // Wake up when wake up pin is low.
         LowPower.powerDown( SLEEP_FOREVER, ADC_OFF, BOD_OFF ); 
+  
+        // Disable external pin interrupt on wake up pin.
+        detachInterrupt( 0 );
       }
     }
   }
-  
-  
-  
-
-  
-  // Disable external pin interrupt on wake up pin.
-  detachInterrupt( 0 );
 }
