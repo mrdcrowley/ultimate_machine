@@ -17,38 +17,34 @@ void wakeUp()
 
 void setup() {
   myservo.attach( 9 ); // attach the servo on pin 9 to the servo object
+  
+    attachInterrupt(0, wakeUp, CHANGE); // Allow wake up pin to trigger interrupt on low.
   pinMode( SWITCH, INPUT );
-  Serial.begin(9600);
+  Serial.begin( 9600 );
 }
 
 void loop() {
+        
   bouncer.update(); // Update the debouncer
-  int value = bouncer.read(); // Get the update value
-  
-  // Allow wake up pin to trigger interrupt on low.
-    attachInterrupt( 0, wakeUp, LOW );
+  int status = bouncer.read(); // Get the update value
 
-  if ( value == LOW ) { // switch turned on, move finger up to turn off switch
-    for( pos = pos; pos < 130; pos += 1 ) { // middle value of 180 is all the way in
-      myservo.write( pos );
+  if ( status == LOW ) { // switch turned on, move finger up to turn off switch
+    for ( pos = pos; pos>=1; pos-=1 ) { // middle value of 1 is all the way out
+      myservo.write( pos );  // move the servo to current position
+      delay( SPEED );
       Serial.print( pos );
       Serial.print( "Low\n" );
-      delay( SPEED );
     }
   } else { // switched turned off, go back in
-    for( pos = pos; pos >= 1; pos -= 1 ) { // middle value of 1 is all the way out
-      myservo.write( pos );  // move the servo to current position
+    for( pos = pos; pos < 130; pos += 1 ) { // middle value of 180 is all the way in
+      myservo.write( pos );
+      delay( SPEED );
       Serial.print( pos );
       Serial.print( "High\n" );
-      delay( SPEED );
-      if ( pos == 130 ) {
+    }
+          
         // Enter power down state with ADC and BOD module disabled.
         // Wake up when wake up pin is low.
-        LowPower.powerDown( SLEEP_FOREVER, ADC_OFF, BOD_OFF ); 
-  
-        // Disable external pin interrupt on wake up pin.
-        detachInterrupt( 0 );
-      }
-    }
+        LowPower.powerDown(SLEEP_FOREVER, ADC_OFF, BOD_OFF);
   }
 }
