@@ -34,6 +34,7 @@ void loop() {
       for ( ; pos >= 1; pos -= 1 ) { // middle value of 1 is all the way out
         myservo.write( pos );  // move the servo to current position
         delay(servoSpeed); // movement speed
+        Serial.print( pos );
       }
     } else { // turned off, move finger back in
       for( ; pos <= 139; pos += 1 ) { // middle value of 180 is all the way in
