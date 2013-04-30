@@ -1,5 +1,5 @@
 # Ultimate Machine
 
-This is an attempt to create a version of Claude Shannon's Ultimate Machine and learn some things about circuitry and the Arduino. It's not the most technically beautiful thing, but it works.
+<a href="http://www.kk.org/thetechnium/archives/2008/03/the_unspeakable.php">Claude Shannon's Ultimate Machine</a> built using Arduino.
 
 ![](https://github.com/mrdcrowley/ultimate_machine/blob/master/fritzing%20schematics/ultimate_machine.png?raw=true)
